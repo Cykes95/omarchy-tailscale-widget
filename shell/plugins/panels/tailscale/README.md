@@ -12,6 +12,9 @@ Native Omarchy bar widget for Tailscale.
 - Copy a machine's Tailscale IP, host name, or DNS name
 - Send files to a machine with Taildrop, when the tailnet allows file sharing
 
+Clicking a machine's copy button opens the available Tailscale addresses:
+IPv4, IPv6, and DNS name. Only addresses supplied by the daemon are shown.
+
 ## Keyboard shortcuts
 
 Inside the panel:

@@ -10,6 +10,10 @@ const tailscale = requireFromRoot('shell/plugins/panels/tailscale/Model.js')
 const panelSource = fs.readFileSync(root + '/shell/plugins/panels/tailscale/Panel.qml', 'utf8')
 
 assert(/function toggleTailscale\(\): string \{ tailscale\.toggleTailscale\(\); return "ok" \}/.test(panelSource), 'tailscale exposes the connection toggle over IPC')
+assert(panelSource.includes('kind: "ip", label: "IPv4'), 'tailscale copy menu labels IPv4 addresses')
+assert(panelSource.includes('kind: "ipv6", label: "IPv6'), 'tailscale copy menu labels IPv6 addresses')
+assert(panelSource.includes('kind: "dns", label: "DNS'), 'tailscale copy menu labels DNS addresses')
+assert(!panelSource.includes('kind: "name", label:'), 'tailscale copy menu excludes machine names')
 
 assertDeepEqual(
   tailscale.filterIPv4(['100.64.0.1', 'fd7a:115c:a1e0::1', '192.168.1.2']),

@@ -874,10 +874,9 @@ Panel {
     readonly property string peerDns: peer ? String(peer.DNSName || "") : ""
     readonly property var copyOptions: {
       var options = []
-      if (peerName !== "") options.push({ kind: "name", label: peerName })
-      if (peerDns !== "") options.push({ kind: "dns", label: peerDns })
-      if (peerIpv6 !== "") options.push({ kind: "ipv6", label: peerIpv6 })
-      if (peerIp !== "") options.push({ kind: "ip", label: peerIp })
+      if (peerIp !== "") options.push({ kind: "ip", label: "IPv4  ·  " + peerIp })
+      if (peerIpv6 !== "") options.push({ kind: "ipv6", label: "IPv6  ·  " + peerIpv6 })
+      if (peerDns !== "") options.push({ kind: "dns", label: "DNS  ·  " + peerDns })
       return options
     }
     property int copyIndex: 0
@@ -903,8 +902,7 @@ Panel {
     }
 
     function copyOption(kind) {
-      if (kind === "name") tailscale.copyPeerName(peer)
-      else if (kind === "dns") tailscale.copyPeerDnsName(peer)
+      if (kind === "dns") tailscale.copyPeerDnsName(peer)
       else if (kind === "ipv6") tailscale.copyToClipboard(peerIpv6, peerName + " IPv6")
       else if (kind === "ip") tailscale.copyPeerIp(peer)
       copyPopup.close()
@@ -985,7 +983,7 @@ Panel {
         iconText: "󰆏"
         foreground: root.foreground
         fontFamily: root.fontFamily
-        enabled: peerRow.peerIp !== "" || peerRow.peerName !== "" || peerRow.peerDns !== "" || peerRow.peerIpv6 !== ""
+        enabled: peerRow.copyOptions.length > 0
         Layout.alignment: Qt.AlignVCenter
         onClicked: peerRow.openCopyMenu()
       }

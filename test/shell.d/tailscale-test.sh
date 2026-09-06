@@ -119,7 +119,7 @@ const mullvadNodes = tailscale.parseExitNodeList(`
  100.66.11.119       dk-cph-wg-001.mullvad.ts.net     Denmark            Copenhagen             -
  100.101.10.10       us-chi-wg-001.mullvad.ts.net     United States      Chicago                -
  100.102.10.10       us-nyc-wg-001.mullvad.ts.net     United States      New York               -
- 100.1.2.3           office.tailnet.ts.net             Denmark            Office                 -
+ 100.1.2.3           example.tailnet.ts.net            Example            Example                -
 
 # To use an exit node, use tailscale set --exit-node=
 `)

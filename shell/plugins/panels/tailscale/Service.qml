@@ -41,6 +41,10 @@ Item {
   property string actionStatus: ""
   property string lastError: ""
 
+  // Set to true by Panel while its popup is open so the refresh timer only
+  // runs while the user is actively looking at it.
+  property bool panelOpen: false
+
   readonly property int refreshIntervalSec: intSetting("refreshIntervalSec", 30, 5, 3600)
   readonly property bool busy: whichProcess.running || statusProcess.running || mullvadExitNodesProcess.running || accountsProcess.running || actionProcess.running || loginProcess.running || switchProcess.running || operatorProcess.running || exitNodeProcess.running
   readonly property string userName: Quickshell.env("USER") || Quickshell.env("LOGNAME")
@@ -388,10 +392,24 @@ Item {
 
   Timer {
     id: refreshTimer
+    // Only polls while the panel is open; the user gets a fresh status as soon
+    // as they open the panel (Panel.onOpenedChanged calls tailscale.refresh()).
     interval: root.refreshIntervalSec * 1000
     repeat: true
-    running: true
-    triggeredOnStart: true
+    running: root.panelOpen
+    onTriggered: root.refresh()
+  }
+
+  Timer {
+    // Catch external state changes (Tailscale dropped, network lost, reconnected)
+    // while the panel is closed, without the overhead of the full 30-second poll.
+    // Five minutes is frequent enough to keep the bar icon accurate without
+    // spawning three tailscale processes every 30 seconds all day long.
+    id: keepaliveTimer
+    interval: 300000
+    repeat: true
+    running: !root.panelOpen
+    triggeredOnStart: false
     onTriggered: root.refresh()
   }
 

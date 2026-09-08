@@ -337,11 +337,14 @@ Panel {
   implicitWidth: button.implicitWidth
   implicitHeight: button.implicitHeight
 
-  onOpenedChanged: if (opened) {
-    cursorActive = false
-    if (panelFlick) panelFlick.contentY = 0
-    tailscale.refresh()
-    Qt.callLater(function() { keyCatcher.forceActiveFocus() })
+  onOpenedChanged: {
+    tailscale.panelOpen = opened
+    if (opened) {
+      cursorActive = false
+      if (panelFlick) panelFlick.contentY = 0
+      tailscale.refresh()
+      Qt.callLater(function() { keyCatcher.forceActiveFocus() })
+    }
   }
   onPeerIndexChanged: scrollCursorIntoView()
   onExitNodeIndexChanged: scrollCursorIntoView()
